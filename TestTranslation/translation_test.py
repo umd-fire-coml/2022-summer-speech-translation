@@ -1,4 +1,4 @@
-from translation import *
+from TestTranslation.translation import *
 
 
 test_eng_texts = [pair[0] for pair in test_pairs]
