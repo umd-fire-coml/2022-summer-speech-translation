@@ -8,10 +8,6 @@ Original file is located at
 """
 
 import re
-from collections import Counter
-import numpy as np
-import pandas as pd
-import textdistance
 
 w = []
 with open('Autocorrect/words.txt', 'r') as f:
