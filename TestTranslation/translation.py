@@ -251,9 +251,10 @@ transformer = keras.Model(
 
 transformer.summary()
 
-#load weights using gdown
+# load weights using gdown
+print(os.listdir())
 gdown.download_folder("https://drive.google.com/drive/folders/1DwN-MlL6MMh7qVJbwoLrWBSMVBN5zbBi")
-transformer.load_weights("./EngToSpanishckpts/cp.ckpt").expect_partial()
+transformer.load_weights("./EngToSpanishckpts/cp.ckpt")
 
 spa_vocab = spa_vectorization.get_vocabulary()
 spa_index_lookup = dict(zip(range(len(spa_vocab)), spa_vocab))
@@ -275,6 +276,8 @@ def decode_sequence(input_sentence):
             break
     return decoded_sentence
 
-
+transformer.compile(
+    "rmsprop", loss="sparse_categorical_crossentropy"
+)
 
 

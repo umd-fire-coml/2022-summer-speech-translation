@@ -7,11 +7,6 @@ Original file is located at
     https://colab.research.google.com/drive/1aH5mYp1dxyn55XMjtVUllBvg37nqGVir
 """
 
-from google.colab import drive
-drive.mount('/content/drive')
-
-!pip install textdistance
-
 import re
 from collections import Counter
 import numpy as np
@@ -19,13 +14,11 @@ import pandas as pd
 import textdistance
 
 w = []
-with open('/content/drive/MyDrive/words.txt', 'r') as f:
+with open('Autocorrect/words.txt', 'r') as f:
   file_name_data = f.read()
   file_name_data = file_name_data.lower()
   w = re.findall('\w+', file_name_data)
 
-print(f"First 10 words: \n{w[0:10]}")
-print(f"{len(w)} total words ")
 
 from nltk.metrics.distance import edit_distance
 def edit(input_sentence):
@@ -41,7 +34,3 @@ def edit(input_sentence):
   output_sentence = ' '.join(sentence)
 
   return output_sentence
-
-print(edit("My namee is uncele sdtevven"))
-print(edit("moneeyeh is greeat"))
-print(edit("establishe that nitrgen is theh essentil vegchtable as of animal living matter"))

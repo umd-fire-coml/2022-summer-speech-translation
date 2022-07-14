@@ -1,5 +1,6 @@
 from TestTranslation.translation import *
 
+transformer.evaluate(train_ds)
 
 test_eng_texts = [pair[0] for pair in test_pairs]
 input_sentence = "This is a test."

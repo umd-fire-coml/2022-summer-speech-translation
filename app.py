@@ -1,6 +1,6 @@
 # have to run this locally as streamlit run app.py
 import streamlit as st
-
+from Autocorrect.autocorrectreal import edit
 from TestTranslation.translation import *
 
 
@@ -11,7 +11,9 @@ option = st.selectbox("Select input type:", ("text input", "audio input"))
 if option == "text input":
     input_sentence = st.text_input("Enter input sentence:")
     if input_sentence is not None and len(input_sentence) > 0:
-        translated = decode_sequence(input_sentence)
+        edited = edit(input_sentence)
+        st.write("Autocorrected sentence: " + edited)
+        translated = decode_sequence(edited)[8:-5]
         st.write(translated)
         input_sentence = None
 else:
