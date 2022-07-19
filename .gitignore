@@ -134,3 +134,5 @@ cmn.txt
 re-model.h5
 TestTranslationChinese/cmn.txt
 TestTranslationChinese/re-model.h5
+AudioToText/AudioToTextCKPT.hdf5
+AudioToTextCKPT.hdf5

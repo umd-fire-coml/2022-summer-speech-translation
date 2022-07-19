@@ -184,10 +184,11 @@ def getSpectro(wav_file):
 
     return spectrogram
 
+# Load Weights
+loadWeights()
 # CONVERT AUDIO TO TEXT
 def AudioToTextUsingModel(wav_file):
-    # Load Weights
-    loadWeights()
+
     
     # Get Spectrogram
     spectro = getSpectro(wav_file)
