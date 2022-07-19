@@ -130,3 +130,7 @@ dmypy.json
 
 # my own ckpts from gdown
 EngToSpanishckpts/
+cmn.txt
+re-model.h5
+TestTranslationChinese/cmn.txt
+TestTranslationChinese/re-model.h5
