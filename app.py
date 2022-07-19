@@ -26,7 +26,7 @@ if option == "Text input":
             input_sentence = None
 else:
     wav_sentence = st.file_uploader("Upload a .wav file:")
-    option3 = st.selectbox("Select audio to text model to use:", ("Our pretrained model (takes some time to run)", "Google API"))
+    option3 = st.selectbox("Select audio to text model to use:", ("Our pretrained model", "Google API"))
     if st.button("Submit .wav file"):
         if option3 == "Our pretrained model":
             input_list = AudioToTextUsingModel(wav_sentence)
