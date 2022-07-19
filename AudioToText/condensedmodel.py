@@ -7,8 +7,9 @@ Original file is located at
     https://colab.research.google.com/drive/1d8zn9Gvp8xlKS2GRer_xzLWtm3InIBE_
 """
 # IMPORTANT
-# !pip install pydub
-# !sudo pip install SpeechRecognition
+# pip install pydub
+# pip install SpeechRecognition
+# pip install gdown
 
 # -*- coding: utf-8 -*-
 
@@ -18,7 +19,7 @@ import numpy as np
 import requests
 import tensorflow as tf
 from tensorflow import keras
-from tensorflow.keras import layers
+from keras import layers
 import librosa
 import speech_recognition as sr
 
@@ -223,3 +224,5 @@ def AudioToTextUsingAPI(audio_file):
         print(
             'Could not request results from Google Speech Recognition service; {0}'.format(e)
             )
+
+print(AudioToTextUsingModel('AudioToText/test_audio.wav'))
