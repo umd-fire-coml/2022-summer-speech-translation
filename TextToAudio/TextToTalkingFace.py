@@ -1,6 +1,37 @@
+import os, glob
+from base64 import b64encode
+from gtts import gTTS
+import gdown
+import threading
+import shutil
+import zipfile
+
+##PARSER STUFF
+ADD_NAIVE_EYE = True  # whether add naive eye blink
+CLOSE_INPUT_FACE_MOUTH = False  # if your image has an opened mouth, put this as True, else False
+AMP_LIP_SHAPE_X = 2.  # amplify the lip motion in horizontal direction
+AMP_LIP_SHAPE_Y = 2.  # amplify the lip motion in vertical direction
+AMP_HEAD_POSE_MOTION = 0.5  # amplify the head pose motion (usually smaller than 1.0, put it to 0. for a static head pose)
+
+
+### IMPORTANT: THIS STUFF ONLY WORKS IF THE SCRIPT IS RUN IN APP.PY BECAUSE OF PATHS
+def addMainFolder():
+    inp = 'https://drive.google.com/file/d/1G6IbxPfQWeionhfdDiPWr6hcob4ER3vO/view?usp=sharing'
+
+    # Set Output
+    out = 'zip.zip'
+
+    # Download
+    if not os.path.exists(out):
+        gdown.download(url = inp, output = out, quiet = False, fuzzy=True)
+    if not os.path.exists("a"):
+        with zipfile.ZipFile(out, 'r') as zip_ref:
+            zip_ref.extractall()
+
+
+ # addMainFolder()
 import sys
 sys.path.append("thirdparty/AdaptiveWingLoss")
-import os, glob
 import numpy as np
 import cv2
 import argparse
@@ -15,10 +46,7 @@ import util.utils as util
 from scipy.signal import savgol_filter
 from src.approaches.train_audio2landmark import Audio2landmark_model
 from IPython.display import HTML
-from base64 import b64encode
-from gtts import gTTS
-import gdown
-import shutil
+
 
 def downloadCKPTS():
     # PATH TO CKPT
@@ -29,11 +57,11 @@ def downloadCKPTS():
     emb_pickle = 'https://drive.google.com/uc?id=18-0CYl5E6ungS3H4rRSHjfYvvm-WwjTI'
 
     # Set Output
-    ckpt_autovc_out = 'TextToAudio/toUploadToVsCode/examples/ckpt/ckpt_autovc.pth'
-    ckpt_content_branch_out = 'TextToAudio/toUploadToVsCode/examples/ckpt/ckpt_content_branch.pth'
-    ckpt_speaker_branch_out = 'TextToAudio/toUploadToVsCode/examples/ckpt/ckpt_speaker_branch.pth'
-    ckpt_116_i2i_comb_out = 'TextToAudio/toUploadToVsCode/examples/ckpt/ckpt_116_i2i_comb.pth'
-    emb_pickle_out = 'TextToAudio/toUploadToVsCode/examples/dump/emb.pickle'
+    ckpt_autovc_out = '/examples/ckpt/ckpt_autovc.pth'
+    ckpt_content_branch_out = '/examples/ckpt/ckpt_content_branch.pth'
+    ckpt_speaker_branch_out = '/examples/ckpt/ckpt_speaker_branch.pth'
+    ckpt_116_i2i_comb_out = '/examples/ckpt/ckpt_116_i2i_comb.pth'
+    emb_pickle_out = '/examples/dump/emb.pickle'
 
     # Download
     gdown.download(url = ckpt_autovc, output = ckpt_autovc_out, quiet = False, fuzzy = True)
@@ -56,15 +84,15 @@ list_of_faces = ['angelina', 'anne', 'audrey', 'aya', 'cesi', 'dali',
 def getListofFaceOptions():
   return list_of_faces
 
-def getParser():
-  parser = argparse.ArgumentParser()
+def getParser(default_head_name):
+  parser = argparse.ArgumentParser(default_head_name)
   parser.add_argument('--jpg', type=str, default='{}.jpg'.format(default_head_name))
   parser.add_argument('--close_input_face_mouth', default=CLOSE_INPUT_FACE_MOUTH, action='store_true')
 
-  parser.add_argument('--load_AUTOVC_name', type=str, default='TextToAudio/toUploadToVsCode/examples/ckpt/ckpt_autovc.pth')
-  parser.add_argument('--load_a2l_G_name', type=str, default='TextToAudio/toUploadToVsCode/examples/ckpt/ckpt_speaker_branch.pth')
-  parser.add_argument('--load_a2l_C_name', type=str, default='TextToAudio/toUploadToVsCode/examples/ckpt/ckpt_content_branch.pth')
-  parser.add_argument('--load_G_name', type=str, default='TextToAudio/toUploadToVsCode/examples/ckpt/ckpt_116_i2i_comb.pth')
+  parser.add_argument('--load_AUTOVC_name', type=str, default='/examples/ckpt/ckpt_autovc.pth')
+  parser.add_argument('--load_a2l_G_name', type=str, default='/examples/ckpt/ckpt_speaker_branch.pth')
+  parser.add_argument('--load_a2l_C_name', type=str, default='/examples/ckpt/ckpt_content_branch.pth')
+  parser.add_argument('--load_G_name', type=str, default='/examples/ckpt/ckpt_116_i2i_comb.pth')
 
   parser.add_argument('--amp_lip_x', type=float, default=AMP_LIP_SHAPE_X)
   parser.add_argument('--amp_lip_y', type=float, default=AMP_LIP_SHAPE_Y)
@@ -98,20 +126,15 @@ def getParser():
 
 def TextToTalkingFace(txt_string, face_name):
   # Get Audio fo txt_string
-  audio_path = 'TextToAudio/toUploadToVsCode/examples/speech.wav'
+  audio_path = '/examples/speech.wav'
   TextToAudio(txt_string, audio_path)
 
   # Face Animation
   default_head_name = face_name        # the image name (with no .jpg) to animate
-  ADD_NAIVE_EYE = True                 # whether add naive eye blink
-  CLOSE_INPUT_FACE_MOUTH = False       # if your image has an opened mouth, put this as True, else False
-  AMP_LIP_SHAPE_X = 2.                 # amplify the lip motion in horizontal direction
-  AMP_LIP_SHAPE_Y = 2.                 # amplify the lip motion in vertical direction
-  AMP_HEAD_POSE_MOTION = 0.5           # amplify the head pose motion (usually smaller than 1.0, put it to 0. for a static head pose)
 
-  opt_parser = getParser()
+  opt_parser = getParser(default_head_name)
 
-  img =cv2.imread('TextToAudio/toUploadToVsCode/examples/' + opt_parser.jpg)
+  img =cv2.imread('/examples/' + opt_parser.jpg)
   predictor = face_alignment.FaceAlignment(face_alignment.LandmarksType._3D, device='cpu', flip_input=True)
   shapes = predictor.get_landmarks(img)
   if (not shapes or len(shapes) != 1):
@@ -119,7 +142,7 @@ def TextToTalkingFace(txt_string, face_name):
   shape_3d = shapes[0]
 
   if(opt_parser.close_input_face_mouth):
-      util.close_input_face_mouth(shape_3d)  
+      util.close_input_face_mouth(shape_3d)
 
   shape_3d[48:, 0] = (shape_3d[48:, 0] - np.mean(shape_3d[48:, 0])) * 1.05 + np.mean(shape_3d[48:, 0]) # wider lips
   shape_3d[49:54, 1] += 0.           # thinner upper lip
@@ -131,25 +154,25 @@ def TextToTalkingFace(txt_string, face_name):
 
   au_data = []
   au_emb = []
-  ains = glob.glob1('TextToAudio/toUploadToVsCode/examples', '*.wav')
-  ains = [item for item in ains if item is not 'tmp.wav']
+  ains = glob.glob1('/examples', '*.wav')
+  ains = [item for item in ains if item != 'tmp.wav']
   ains.sort()
   for ain in ains:
-      os.system('ffmpeg -y -loglevel error -i TextToAudio/toUploadToVsCode/examples/{} -ar 16000 TextToAudio/toUploadToVsCode/examples/tmp.wav'.format(ain))
-      shutil.copyfile('TextToAudio/toUploadToVsCode/examples/tmp.wav', 'TextToAudio/toUploadToVsCode/examples/{}'.format(ain))
+      os.system('ffmpeg -y -loglevel error -i /examples/{} -ar 16000 /examples/tmp.wav'.format(ain))
+      shutil.copyfile('/examples/tmp.wav', '/examples/{}'.format(ain))
 
       # au embedding
       from thirdparty.resemblyer_util.speaker_emb import get_spk_emb
-      me, ae = get_spk_emb('TextToAudio/toUploadToVsCode/examples/{}'.format(ain))
+      me, ae = get_spk_emb('/examples/{}'.format(ain))
       au_emb.append(me.reshape(-1))
 
-      c = AutoVC_mel_Convertor('TextToAudio/toUploadToVsCode/examples')
+      c = AutoVC_mel_Convertor('/examples')
 
-      au_data_i = c.convert_single_wav_to_autovc_input(audio_filename=os.path.join('TextToAudio/toUploadToVsCode/examples', ain),
+      au_data_i = c.convert_single_wav_to_autovc_input(audio_filename=os.path.join('/examples', ain),
             autovc_model_path=opt_parser.load_AUTOVC_name)
       au_data += au_data_i
-  if(os.path.isfile('TextToAudio/toUploadToVsCode/examples/tmp.wav')):
-      os.remove('TextToAudio/toUploadToVsCode/examples/tmp.wav')
+  if(os.path.isfile('/examples/tmp.wav')):
+      os.remove('/examples/tmp.wav')
 
   # landmark fake placeholder
   fl_data = []
@@ -162,20 +185,20 @@ def TextToTalkingFace(txt_string, face_name):
       rot_quat.append(np.zeros(shape=(au_length, 4)))
       anchor_t_shape.append(np.zeros(shape=(au_length, 68 * 3)))
 
-  if(os.path.exists(os.path.join('TextToAudio/toUploadToVsCode/examples', 'dump', 'random_val_fl.pickle'))):
-      os.remove(os.path.join('TextToAudio/toUploadToVsCode/examples', 'dump', 'random_val_fl.pickle'))
-  if(os.path.exists(os.path.join('TextToAudio/toUploadToVsCode/examples', 'dump', 'random_val_fl_interp.pickle'))):
-      os.remove(os.path.join('TextToAudio/toUploadToVsCode/examples', 'dump', 'random_val_fl_interp.pickle'))
-  if(os.path.exists(os.path.join('TextToAudio/toUploadToVsCode/examples', 'dump', 'random_val_au.pickle'))):
-      os.remove(os.path.join('TextToAudio/toUploadToVsCode/examples', 'dump', 'random_val_au.pickle'))
-  if (os.path.exists(os.path.join('TextToAudio/toUploadToVsCode/examples', 'dump', 'random_val_gaze.pickle'))):
-      os.remove(os.path.join('TextToAudio/toUploadToVsCode/examples', 'dump', 'random_val_gaze.pickle'))
+  if(os.path.exists(os.path.join('/examples', 'dump', 'random_val_fl.pickle'))):
+      os.remove(os.path.join('/examples', 'dump', 'random_val_fl.pickle'))
+  if(os.path.exists(os.path.join('/examples', 'dump', 'random_val_fl_interp.pickle'))):
+      os.remove(os.path.join('/examples', 'dump', 'random_val_fl_interp.pickle'))
+  if(os.path.exists(os.path.join('/examples', 'dump', 'random_val_au.pickle'))):
+      os.remove(os.path.join('/examples', 'dump', 'random_val_au.pickle'))
+  if (os.path.exists(os.path.join('/examples', 'dump', 'random_val_gaze.pickle'))):
+      os.remove(os.path.join('/examples', 'dump', 'random_val_gaze.pickle'))
 
-  with open(os.path.join('TextToAudio/toUploadToVsCode/examples', 'dump', 'random_val_fl.pickle'), 'wb') as fp:
+  with open(os.path.join('/examples', 'dump', 'random_val_fl.pickle'), 'wb') as fp:
       pickle.dump(fl_data, fp)
-  with open(os.path.join('TextToAudio/toUploadToVsCode/examples', 'dump', 'random_val_au.pickle'), 'wb') as fp:
+  with open(os.path.join('/examples', 'dump', 'random_val_au.pickle'), 'wb') as fp:
       pickle.dump(au_data, fp)
-  with open(os.path.join('TextToAudio/toUploadToVsCode/examples', 'dump', 'random_val_gaze.pickle'), 'wb') as fp:
+  with open(os.path.join('/examples', 'dump', 'random_val_gaze.pickle'), 'wb') as fp:
       gaze = {'rot_trans':rot_tran, 'rot_quat':rot_quat, 'anchor_t_shape':anchor_t_shape}
       pickle.dump(gaze, fp)
 
@@ -185,11 +208,11 @@ def TextToTalkingFace(txt_string, face_name):
   else:
       model.test(au_emb=None)
 
-  fls = glob.glob1('TextToAudio/toUploadToVsCode/examples', 'pred_fls_*.txt')
+  fls = glob.glob1('/examples', 'pred_fls_*.txt')
   fls.sort()
 
   for i in range(0,len(fls)):
-      fl = np.loadtxt(os.path.join('TextToAudio/toUploadToVsCode/examples', fls[i])).reshape((-1, 68,3))
+      fl = np.loadtxt(os.path.join('/examples', fls[i])).reshape((-1, 68,3))
       fl[:, :, 0:2] = -fl[:, :, 0:2]
       fl[:, :, 0:2] = fl[:, :, 0:2] / scale - shift
 
@@ -206,31 +229,23 @@ def TextToTalkingFace(txt_string, face_name):
       model = Image_translation_block(opt_parser, single_test=True)
       with torch.no_grad():
           model.single_test(jpg=img, fls=fl, filename=fls[i], prefix=opt_parser.jpg.split('.')[0])
-      os.remove(os.path.join('TextToAudio/toUploadToVsCode/examples', fls[i]))
+      os.remove(os.path.join('/examples', fls[i]))
 
   for ain in ains:
     OUTPUT_MP4_NAME = '{}_pred_fls_{}_audio_embed.mp4'.format(
       opt_parser.jpg.split('.')[0],
       ain.split('.')[0]
       )
-    
-    mp4 = open('TextToAudio/toUploadToVsCode/examples/{}'.format(OUTPUT_MP4_NAME),'rb').read()
+
+    mp4 = open('/examples/{}'.format(OUTPUT_MP4_NAME),'rb').read()
 
     data_url = "data:video/mp4;base64," + b64encode(mp4).decode()
 
-    return 'TextToAudio/toUploadToVsCode/examples/' + str(OUTPUT_MP4_NAME)
+    return '/examples/' + str(OUTPUT_MP4_NAME)
 
 def deleteOldFiles(audio_name):
-  shutil.rmtree('TextToAudio/toUploadToVsCode/examples/speech.wav')
-  shutil.rmtree('TextToAudio/toUploadToVsCode/examples/speech_av.wav')
+  shutil.rmtree('/examples/speech.wav')
+  shutil.rmtree('/examples/speech_av.wav')
   shutil.rmtree(audio_name)
 
 
-def addMainFolder():
-    inp = 'https://drive.google.com/drive/folders/1NnPMtgmaWCX6qqav_fPWtK1N-fJfNEAZ?usp=sharing'
-
-    # Set Output
-    out = 'TextToAudio'
-
-    # Download
-    gdown.download(url = inp, output = out, quiet = False, fuzzy = True)
