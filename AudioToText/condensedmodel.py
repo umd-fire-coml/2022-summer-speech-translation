@@ -135,26 +135,7 @@ def loadWeights():
 
     # Load CKPT to Model
     model.load_weights(output)
-
-def convertAudioToWav(audio_file):
-    ext = os.path.splitext(audio_file)[-1].lower()
-
-    audio_to_return = 'audio_as.wav'
-
-    # Now we can simply use == to check for equality, no need for wildcards.
-    if ext == ".mp3":
-        subprocess.call(['ffmpeg', '-i', audio_file, audio_to_return])
-    elif ext == ".flac":
-        subprocess.call(['ffmpeg', '-i', audio_file, audio_to_return])
-    elif ext == ".m4a":
-        subprocess.call(['ffmpeg', '-i', audio_file, audio_to_return])
-    elif ext == ".wma":
-        subprocess.call(['ffmpeg', '-i', audio_file, audio_to_return])
-    elif ext == ".aac":
-        subprocess.call(['ffmpeg', '-i', audio_file, audio_to_return])
-    
-    return audio_to_return
-
+s
 def load_wav(filename):
     wav,_ = librosa.load(convertAudioToWav(filename), sr = 22050)
 
@@ -224,7 +205,7 @@ def AudioToTextUsingModel(wav_file):
     return output_text
 
 def AudioToTextUsingAPI(audio_file):
-    AUDIO_FILE = convertAudioToWav(audio_file)
+    AUDIO_FILE = load_wav(audio_file)
     
     # use the audio file as the audio source
     
