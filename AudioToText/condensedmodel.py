@@ -10,18 +10,20 @@ Original file is located at
 # pip install pydub
 # pip install SpeechRecognition
 # pip install gdown
+# pip install ffmpeg
 
 # -*- coding: utf-8 -*-
 
 # IMPORTS
 import gdown
 import numpy as np
-import requests
 import tensorflow as tf
 from tensorflow import keras
 from keras import layers
 import librosa
 import speech_recognition as sr
+import subprocess
+import os
 
 # MODEL LOSS
 def CTCLoss(y_true, y_pred):
@@ -134,8 +136,27 @@ def loadWeights():
     # Load CKPT to Model
     model.load_weights(output)
 
+def convertAudioToWav(audio_file):
+    ext = os.path.splitext(audio_file)[-1].lower()
+
+    audio_to_return = 'audio_as.wav'
+
+    # Now we can simply use == to check for equality, no need for wildcards.
+    if ext == ".mp3":
+        subprocess.call(['ffmpeg', '-i', audio_file, audio_to_return])
+    elif ext == ".flac":
+        subprocess.call(['ffmpeg', '-i', audio_file, audio_to_return])
+    elif ext == ".m4a":
+        subprocess.call(['ffmpeg', '-i', audio_file, audio_to_return])
+    elif ext == ".wma":
+        subprocess.call(['ffmpeg', '-i', audio_file, audio_to_return])
+    elif ext == ".aac":
+        subprocess.call(['ffmpeg', '-i', audio_file, audio_to_return])
+    
+    return audio_to_return
+
 def load_wav(filename):
-    wav,_ = librosa.load(filename, sr = 22000)
+    wav,_ = librosa.load(convertAudioToWav(filename), sr = 22050)
 
     audio = tf.convert_to_tensor(
         wav,
@@ -181,16 +202,15 @@ def getSpectro(wav_file):
     stddevs = tf.math.reduce_std(spectrogram, 1, keepdims=True)
     spectrogram = (spectrogram - means) / (stddevs + 1e-10)
 
-    spectrogram = np.expand_dims(spectrogram, axis=0)
+    spectrogram = np.expand_dims(spectrogram, axis = 0)
 
     return spectrogram
 
 # Load Weights
 loadWeights()
+
 # CONVERT AUDIO TO TEXT
 def AudioToTextUsingModel(wav_file):
-
-    
     # Get Spectrogram
     spectro = getSpectro(wav_file)
 
@@ -204,7 +224,7 @@ def AudioToTextUsingModel(wav_file):
     return output_text
 
 def AudioToTextUsingAPI(audio_file):
-    AUDIO_FILE = (audio_file)
+    AUDIO_FILE = convertAudioToWav(audio_file)
     
     # use the audio file as the audio source
     
