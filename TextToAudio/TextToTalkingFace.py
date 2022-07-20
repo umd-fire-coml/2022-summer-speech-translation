@@ -225,4 +225,11 @@ def deleteOldFiles(audio_name):
   shutil.rmtree(audio_name)
 
 
+def addMainFolder():
+    inp = 'https://drive.google.com/drive/folders/1NnPMtgmaWCX6qqav_fPWtK1N-fJfNEAZ?usp=sharing'
 
+    # Set Output
+    out = 'TextToAudio'
+
+    # Download
+    gdown.download(url = inp, output = out, quiet = False, fuzzy = True)
