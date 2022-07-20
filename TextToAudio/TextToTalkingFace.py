@@ -222,6 +222,7 @@ def TextToTalkingFace(txt_string, face_name):
 
 def deleteOldFiles(audio_name):
   shutil.rmtree('TextToAudio/toUploadToVsCode/examples/speech.wav')
+  shutil.rmtree('TextToAudio/toUploadToVsCode/examples/speech_av.wav')
   shutil.rmtree(audio_name)
 
 
