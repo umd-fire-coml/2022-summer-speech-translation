@@ -133,6 +133,7 @@ def loadWeights():
 
     # Load CKPT to Model
     model.load_weights(output)
+    
 def load_wav(filename):
     wav,_ = librosa.load(filename, sr = 22050)
 
