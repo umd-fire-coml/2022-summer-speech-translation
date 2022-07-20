@@ -22,8 +22,6 @@ from tensorflow import keras
 from keras import layers
 import librosa
 import speech_recognition as sr
-import subprocess
-import os
 
 # MODEL LOSS
 def CTCLoss(y_true, y_pred):
@@ -135,9 +133,8 @@ def loadWeights():
 
     # Load CKPT to Model
     model.load_weights(output)
-s
 def load_wav(filename):
-    wav,_ = librosa.load(convertAudioToWav(filename), sr = 22050)
+    wav,_ = librosa.load(filename, sr = 22050)
 
     audio = tf.convert_to_tensor(
         wav,
@@ -205,7 +202,7 @@ def AudioToTextUsingModel(wav_file):
     return output_text
 
 def AudioToTextUsingAPI(audio_file):
-    AUDIO_FILE = load_wav(audio_file)
+    AUDIO_FILE = audio_file
     
     # use the audio file as the audio source
     

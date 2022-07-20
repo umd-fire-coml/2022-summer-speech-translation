@@ -7,7 +7,7 @@ from AudioToText.condensedmodel import AudioToTextUsingAPI
 from AudioToText.condensedmodel import AudioToTextUsingModel
 
 
-st.title("Translation model test")
+st.title("FIRE COML Summer 2022 Translation Model")
 
 option = st.selectbox("Select input type:", ("Text input", "Audio input"))
 option2 = st.selectbox("Select translation language:", ("Spanish", "Chinese"))
@@ -25,9 +25,10 @@ if option == "Text input":
             st.write(translated)
             input_sentence = None
 else:
-    wav_sentence = st.file_uploader("Upload a .wav file:")
+    wav_sentence = st.file_uploader("Upload an audio file (.wav):", type=\
+        ["wav"])
     option3 = st.selectbox("Select audio to text model to use:", ("Our pretrained model", "Google API"))
-    if st.button("Submit .wav file"):
+    if st.button("Submit audio file"):
         if option3 == "Our pretrained model":
             input_list = AudioToTextUsingModel(wav_sentence)
             input_sentence = "".join(input_list)
