@@ -19,6 +19,7 @@ from tensorflow.keras import layers
 from tensorflow.keras.layers.experimental.preprocessing import TextVectorization
 import os
 import gdown
+from os.path import exists
 
 text_file = keras.utils.get_file(
     fname = "spa-eng.zip",
@@ -253,7 +254,8 @@ transformer.summary()
 
 # load weights using gdown
 print(os.listdir())
-gdown.download_folder("https://drive.google.com/drive/folders/1DwN-MlL6MMh7qVJbwoLrWBSMVBN5zbBi")
+if not exists("./EngToSpanishckpts"):
+    gdown.download_folder("https://drive.google.com/drive/folders/1DwN-MlL6MMh7qVJbwoLrWBSMVBN5zbBi")
 transformer.load_weights("./EngToSpanishckpts/cp.ckpt")
 
 spa_vocab = spa_vectorization.get_vocabulary()
