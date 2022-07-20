@@ -22,7 +22,7 @@ from tensorflow import keras
 from keras import layers
 import librosa
 import speech_recognition as sr
-
+from os.path import exists
 # MODEL LOSS
 def CTCLoss(y_true, y_pred):
     # Compute the training-time loss value
@@ -129,7 +129,8 @@ def loadWeights():
     output = "AudioToTextCKPT.hdf5"
 
     # Download
-    gdown.download(url = ckpt_link, output = output, quiet = False, fuzzy = True)
+    if not exists("AudioToTextCKPT.hdf5"):
+        gdown.download(url = ckpt_link, output = output, quiet = False, fuzzy = True)
 
     # Load CKPT to Model
     model.load_weights(output)

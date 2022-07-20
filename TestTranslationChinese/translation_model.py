@@ -17,11 +17,12 @@ import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
 from tensorflow.keras.layers.experimental.preprocessing import TextVectorization
-
+from os.path import exists
 import gdown
 
-url = "https://drive.google.com/uc?id=1FOC2x5HlgcFTMgnGhPjvLWWlEqVTLQno"
-gdown.download(url, quiet=False)
+if not exists("cmn.txt"):
+    url = "https://drive.google.com/uc?id=1FOC2x5HlgcFTMgnGhPjvLWWlEqVTLQno"
+    gdown.download(url, quiet=False)
 
 with open('cmn.txt', encoding="utf-8") as f:
     lines = f.read().split("\n")[:-1]
@@ -224,7 +225,8 @@ class TransformerDecoder(layers.Layer):
         return config
 
 url = "https://drive.google.com/uc?id=1a4eTAL4sLUi42P28Veihrv-fVPwFymTa"
-gdown.download(url, quiet=False)
+if not exists("re-model.h5"):
+    gdown.download(url, quiet=False)
 
 custom_objects = {"TransformerEncoder": TransformerEncoder, "PositionalEmbedding": PositionalEmbedding, "TransformerDecoder": TransformerDecoder}
 with keras.utils.custom_object_scope(custom_objects):
