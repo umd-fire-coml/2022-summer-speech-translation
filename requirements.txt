@@ -13,3 +13,4 @@ h5py==3.1.0
 resemblyzer==0.1.1.dev0
 pysptk==0.1.21
 pyworld==0.3.0
+torch

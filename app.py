@@ -1,5 +1,12 @@
 # have to run this locally as streamlit run app.py
 import streamlit as st
+import os
+@st.cache
+def dir_setup():
+    os.chdir("appdir")
+
+dir_setup()
+
 from Autocorrect.autocorrectreal import edit
 from TestTranslation.translation import decode_sequence
 from TestTranslationChinese.translation_model import decode_sequence_chinese
@@ -17,6 +24,7 @@ option4 = st.selectbox("Select visualization face:", ('angelina', 'anne', 'audre
                  'donald', 'dragonmom', 'dwayne', 'harry', 'hermione',
                  'johnny', 'leo', 'morgan', 'natalie', 'neo', 'obama',
                  'rihanna', 'ron', 'scarlett', 'taylor'))
+st.write("Note: video can take up to a minute to load")
 if option == "Text input":
     input_sentence = st.text_input("Enter input sentence:")
     if input_sentence is not None and len(input_sentence) > 0:
