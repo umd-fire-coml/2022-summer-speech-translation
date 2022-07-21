@@ -17,7 +17,7 @@ from TextToAudio.TextToTalkingFace import *
 import torch
 import nvsmi
 
-print("CUDA test: " + torch.cuda.is_available())
+print("CUDA test: " + str(torch.cuda.is_available()))
 print(nvsmi.get_gpus())
 
 st.title("FIRE COML Summer 2022 Translation Model")
