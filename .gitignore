@@ -147,3 +147,4 @@ appdir/.idea
 appdir/examples
 appdir/zip.zip
 appdir/.git
+appdir/gypsum_history.sh
