@@ -129,12 +129,17 @@ dmypy.json
 .pyre/
 
 # my own ckpts from gdown
-EngToSpanishckpts/
-cmn.txt
-re-model.h5
-TestTranslationChinese/cmn.txt
-TestTranslationChinese/re-model.h5
-AudioToText/AudioToTextCKPT.hdf5
-AudioToTextCKPT.hdf5
-TextToAudio/zip.zip
-TextToAudio/toUploadToVsCode/
+appdir/EngToSpanishckpts/
+appdir/cmn.txt
+appdir/re-model.h5
+appdir/TestTranslationChinese/cmn.txt
+appdir/TestTranslationChinese/re-model.h5
+appdir/AudioToText/AudioToTextCKPT.hdf5
+appdir/AudioToTextCKPT.hdf5
+appdir/TextToAudio/zip.zip
+appdir/TextToAudio/toUploadToVsCode/
+appdir/doc
+appdir/facewarp
+appdir/src
+appdir/thirdparty
+appdir/util
