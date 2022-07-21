@@ -14,3 +14,4 @@ resemblyzer==0.1.1.dev0
 pysptk==0.1.21
 pyworld==0.3.0
 torch
+ffmpeg
