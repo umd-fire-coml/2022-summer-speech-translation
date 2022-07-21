@@ -15,5 +15,4 @@ pysptk==0.1.21
 pyworld==0.3.0
 torch
 ffmpeg
-nvsmi
-gputil
+nvsmi==0.4.2
