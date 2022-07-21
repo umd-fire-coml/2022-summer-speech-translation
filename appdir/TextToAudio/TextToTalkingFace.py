@@ -5,6 +5,7 @@ import gdown
 import threading
 import shutil
 import zipfile
+import shutil
 
 ##PARSER STUFF
 ADD_NAIVE_EYE = True  # whether add naive eye blink
@@ -28,6 +29,7 @@ def addMainFolder():
         with zipfile.ZipFile(out, 'r') as zip_ref:
             zip_ref.extractall()
             print("extract done")
+            shutil.rmtree(".git")
 
 
 addMainFolder()

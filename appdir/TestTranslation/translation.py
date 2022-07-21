@@ -254,10 +254,10 @@ transformer.summary()
 
 # load weights using gdown
 print(os.listdir())
-if not exists("./EngToSpanishckpts"):
+if not exists("EngToSpanishckpts"):
     gdown.download_folder("https://drive.google.com/drive/folders/1DwN-MlL6MMh7qVJbwoLrWBSMVBN5zbBi")
-transformer.load_weights("./EngToSpanishckpts/cp.ckpt")
-
+transformer.load_weights("EngToSpanishckpts/cp.ckpt")
+#a
 spa_vocab = spa_vectorization.get_vocabulary()
 spa_index_lookup = dict(zip(range(len(spa_vocab)), spa_vocab))
 max_decoded_sentence_length = 20

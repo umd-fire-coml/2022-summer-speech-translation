@@ -12,7 +12,8 @@ import torch
 import nvsmi
 
 print("CUDA test: " + str(torch.cuda.is_available()))
-print(nvsmi.get_gpus())
+for a in nvsmi.get_gpus():
+    print(a.name)
 
 st.title("FIRE COML Summer 2022 Translation Model")
 
