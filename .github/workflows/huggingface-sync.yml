@@ -16,4 +16,4 @@ jobs:
       - name: Push to hub
         env:
           SYNC: ${{ secrets.SYNC }}
-        run: git push https://szhang99:$SYNC@huggingface.co/spaces/szhang99/fire-coml-summer-2022 main
+        run: git push -f https://szhang99:$SYNC@huggingface.co/spaces/szhang99/fire-coml-summer-2022 main
