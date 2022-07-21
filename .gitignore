@@ -144,3 +144,6 @@ appdir/src
 appdir/thirdparty
 appdir/util
 appdir/.idea
+appdir/examples
+appdir/zip.zip
+appdir/.git
