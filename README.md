@@ -10,3 +10,5 @@ pinned: false
 ---
 
 Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
+
+This version of the translation model uses the translated text and creates a video with a character saying the test. It only runs on a NVIDIA GPU.
