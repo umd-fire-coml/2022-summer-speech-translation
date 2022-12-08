@@ -255,7 +255,7 @@ transformer.summary()
 # load weights using gdown
 print(os.listdir())
 if not exists("./EngToSpanishckpts"):
-    gdown.download_folder("https://drive.google.com/drive/folders/1DwN-MlL6MMh7qVJbwoLrWBSMVBN5zbBi")
+    gdown.download_folder("https://drive.google.com/drive/folders/1DwN-MlL6MMh7qVJbwoLrWBSMVBN5zbBi?usp=sharing")
 transformer.load_weights("./EngToSpanishckpts/cp.ckpt")
 
 spa_vocab = spa_vectorization.get_vocabulary()
